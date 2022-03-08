@@ -1,10 +1,10 @@
 # load .env
 import cx_Oracle
 
-import os
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(verbose=True)
 
+import os
 
 TARGET_HOST = os.environ['TARGET_HOST']
 PORT = os.environ['PORT']
@@ -14,10 +14,10 @@ PASSWORD = os.environ['DBPASSWORD']
 
 def db_connect():
     try:
-        # tns = cx_Oracle.makedsn(TARGET_HOST, PORT, SERVICE_NAME)  # tnsを設定
-        # conn = cx_Oracle.connect(USERNAME, PASSWORD, tns)  # DBに接続
-        tns = cx_Oracle.makedsn('dx.huangyi.cn','1521','ORCL')  # tnsを設定
-        conn = cx_Oracle.connect('C##VCC', 'VCC', tns)  # DBに接続
+        tns = cx_Oracle.makedsn(TARGET_HOST, PORT, SERVICE_NAME)  # tnsを設定
+        conn = cx_Oracle.connect(USERNAME, PASSWORD, tns)  # DBに接続
+        # tns = cx_Oracle.makedsn('dx.huangyi.cn','1521','ORCL')  # tnsを設定
+        # conn = cx_Oracle.connect('C##VCC', 'VCC', tns)  # DBに接続
         # conn = cx_Oracle.connect('C##VCC', 'VCC', 'dx.huangyi.cn:1521/ORCL')
         return conn
     except Exception as e:
