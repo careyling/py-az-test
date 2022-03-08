@@ -13,10 +13,10 @@ PASSWORD = os.environ['DBPASSWORD']
 
 def db_connect():
     try:
-        # tns = cx_Oracle.makedsn(
-        #     TARGET_HOST, PORT, SERVICE_NAME)  # tnsを設定
-        # conn = cx_Oracle.connect(USERNAME, PASSWORD, tns)  # DBに接続
-        conn = cx_Oracle.connect('C##VCC', 'VCC', 'dx.huangyi.cn:1521/ORCL')
+        tns = cx_Oracle.makedsn(
+            TARGET_HOST, PORT, SERVICE_NAME)  # tnsを設定
+        conn = cx_Oracle.connect(USERNAME, PASSWORD, tns)  # DBに接続
+        #conn = cx_Oracle.connect('C##VCC', 'VCC', 'dx.huangyi.cn:1521/ORCL')
         return conn
     except Exception as e:
         raise e
