@@ -1,7 +1,6 @@
 from flask import Flask, abort, request, jsonify, render_template, json,redirect,url_for
 
 from db_conn import db_data_command
-import cx_Oracle as cx
 
 from dotenv import load_dotenv,find_dotenv
 load_dotenv(verbose=True)
@@ -19,15 +18,7 @@ def index():
 @myapp.route('/SEARCH', methods=['GET'])
 def search():
     try:
-        conn = cx.connect('C##VCC', 'VCC', 'dx.huangyi.cn:1521/ORCL')
-        cursor = conn.cursor()
-        sql = "SELECT ID,V1,V2 FROM TESTDATA ORDER BY ID"
-        cursor.execute(sql)
-        datas = cursor.fetchall()
-        cursor.close()
-        conn.close()
-        #db_conn.db_data_commandからデータ取得したい、LocalはOK、Azure上はNgのため、直接cx.connectに利用します
-        #datas = db_data_command.db_data_selectall()
+        datas = db_data_command.db_data_selectall()
         return render_template('mainlist.html', result=datas)
     except Exception as e:
         err = str(e)
@@ -47,16 +38,7 @@ def add_data():
     str = "{'ID':"+id+",'V1':"+v1+",'V2':"+v2+"}"
     data = eval(str)
     try:
-        conn = cx.connect('C##VCC', 'VCC', 'dx.huangyi.cn:1521/ORCL')
-        cursor = conn.cursor()
-        sql = "INSERT INTO TESTDATA VALUES(:1,:2,:3)"
-        param = (id, v1, v2)
-        cursor.execute(sql, param)
-        conn.commit()
-        cursor.close()
-        conn.close()
-        #db_conn.db_data_commandからデータ取得したい、LocalはOK、Azure上はNgのため、直接cx.connectに利用します
-        #db_data_command.db_data_add(data)
+        db_data_command.db_data_add(data)
         return redirect(url_for('search'))
     except Exception as e:
         err = str(e)

@@ -1,6 +1,7 @@
 # load .env
-import os
 import cx_Oracle
+
+import os
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(verbose=True)
 
@@ -13,10 +14,11 @@ PASSWORD = os.environ['DBPASSWORD']
 
 def db_connect():
     try:
-        tns = cx_Oracle.makedsn(
-            TARGET_HOST, PORT, SERVICE_NAME)  # tnsを設定
-        conn = cx_Oracle.connect(USERNAME, PASSWORD, tns)  # DBに接続
-        #conn = cx_Oracle.connect('C##VCC', 'VCC', 'dx.huangyi.cn:1521/ORCL')
+        # tns = cx_Oracle.makedsn(TARGET_HOST, PORT, SERVICE_NAME)  # tnsを設定
+        # conn = cx_Oracle.connect(USERNAME, PASSWORD, tns)  # DBに接続
+        tns = cx_Oracle.makedsn('dx.huangyi.cn','1521','ORCL')  # tnsを設定
+        conn = cx_Oracle.connect('C##VCC', 'VCC', tns)  # DBに接続
+        # conn = cx_Oracle.connect('C##VCC', 'VCC', 'dx.huangyi.cn:1521/ORCL')
         return conn
     except Exception as e:
         raise e
@@ -74,6 +76,7 @@ def db_data_add(data):
     cur.close()  # カーソル クローズ
     db_connect_close(conn)
 
+    return True
 
 def db_data_upd(data):
     ID = str(data["ID"])
