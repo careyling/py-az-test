@@ -2,3 +2,7 @@ Flask
 requests
 python-dotenv
 cx_Oracle
+azure-storage
+azure-identity
+azure-mgmt-resource
+azure-mgmt-storage
