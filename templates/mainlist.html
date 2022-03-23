@@ -4,24 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <title>list</title>
+    <title>list</title>    
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <body>
     <div class="container">
-        <h2>list</h2>
         <!doctype html>
-        <input type="submit" class="btn btn-success" value="SEARCH" onclick="search()" />
-        <input type="submit" class="btn btn-success" value="ADD" onclick="add()" />
+        <div>{{route}}</div>
+        <div>
+            <input type="submit" class="btn btn-success" value="SEARCH" onclick="search()" />
+            <input type="submit" class="btn btn-success" value="ADD" onclick="add()" />
+        </div>
         <table border=1 class="container">
             <tr style="height:50px;background-color: #9adde6;" >
-                <th width="50"> ID </th>
-                <th width="50"> V1 </th>
-                <th width="50"> V2 </th>
-                <th width="30"> UPD </th>
-                <th width="30"> DEL </th>
+                <th width="100px"> ID </th>
+                <th width="100px"> V1 </th>
+                <th width="100px"> V2 </th>
+                <th width="30px"> UPD </th>
+                <th width="30px"> DEL </th>
             </tr>
             {% for ID, V1,V2 in result %}
             <tr>
@@ -35,22 +38,24 @@
         </table>
     </div>
 </body>
-
-<script>
-    function search() {
-        window.location.href = "SEARCH";
+<script>    
+    basepath = "{{route}}"
+    function search() {        
+        url = basepath+".SEARCH/";
+        window.location.href = basepath+".SEARCH";
     }
     function add() {
-        window.location.href = "ADD";
+        url = basepath+".SEARCH/";
+        window.location.href =  basepath+".ADD";
     }
     function upd(id) {
-        window.location.href = "UPD/" + id;
+        window.location.href =  basepath+".UPD/" + id;
     }
     function del(id) {
+        url = basepath+".DEL/" + id;
         var params = {"id":id};
-        httpPost(id,params);
+        httpPost(url,params);
     }
-
 
     //发送POST请求跳转到指定页面
     function httpPost(URL, PARAMS) {
@@ -68,7 +73,6 @@
         temp.submit();
         return temp;
     }
-
 
     //发送POST请求跳转到指定页面
     function httpPost(URL) {

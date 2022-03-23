@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Index</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="/static/js/jquery-3.6.0.min/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-5.1.3/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-5.1.3/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-black navbar-dark">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="example-navbar-collapse">
+                <!-- Brand/logo -->
+                <a class="navbar-brand">PY-AZ-TEST</a>
+                <!-- Links -->
+                <ul class="navbar-nav">
+                    {% for mu in menulist %}
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="loadPage('{{ mu.link }}')">{{ mu.name }} </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 中间部分 -->
+    <div class="container-fluid">
+        <div class="row">
+            <!--左边菜单栏-->
+            <div class="col-sm-2 pt-2" id="menulist">
+                {% for mu in menulist %}
+                <a class="list-group-item" onclick="loadPage('{{ mu.link }}')"> {{ mu.name }} </a>
+                {% endfor %}
+            </div>
+            <div class="col-sm-10 pt-2" id="right" style="height: 800px;">
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部页脚部分 -->
+    <div class="footer">
+        <p class="text-center">
+            2019 &copy; zl.
+        </p>
+    </div>
+</body>
+<script>
+    $(document).ready(function () {
+        $('#menulist> a').click(function (e) {
+            //e.preventDefault();    加上这句则导航的<a>标签会失效
+            $('#menulist> a').removeClass('active');
+            $(this).addClass('active');
+        });
+    });
+    function loadPage(url) {
+        $.get(url, function (data, status) {
+            $("#right").html(data);
+        });
+    }
+    $('#menulist> a')[0].click();
+</script>
+
+</html>

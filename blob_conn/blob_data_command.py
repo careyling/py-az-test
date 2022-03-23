@@ -1,6 +1,5 @@
 # load .env
 from azure.storage.blob import BlockBlobService
-from azure.storage.blob import ContentSettings
 import os,json
 
 from dotenv import load_dotenv,find_dotenv
@@ -9,7 +8,7 @@ load_dotenv(verbose=True)
 mystoragename = os.environ['BLOB_STORGENAME']
 mystoragekey = os.environ['BLOB_STORGEKEY']
 mycontainername = os.environ['CONTAINER_NAME']
-myblobdic = os.environ['CONTAINER_BLOB_DIC']
+myblobdic = os.environ['ENTRY_BLOB_DIC']
 
 blob_service = BlockBlobService(account_name=mystoragename, account_key=mystoragekey)
 
@@ -18,17 +17,18 @@ def db_data_selectall():
         blobs = blob_service.list_blobs(mycontainername)
         datas = []
         for blob in blobs:
-            blobstr = blob_service.get_blob_to_text(mycontainername,blob.name).content
-            evaldata = eval(blobstr)
-            id = evaldata['id']
-            v1 = evaldata['v1']
-            v2 = evaldata['v2']
-            tuplestr = (id,v1,v2)
-            datas.append(tuplestr)
+            blobname = blob.name
+            if blobname.startswith(myblobdic):
+                blobstr = blob_service.get_blob_to_text(mycontainername,blobname).content
+                evaldata = eval(blobstr)
+                id = evaldata['id']
+                v1 = evaldata['v1']
+                v2 = evaldata['v2']
+                tuplestr = (id,v1,v2)
+                datas.append(tuplestr)
         return datas
     except Exception as e:
         raise e
-
 
 def db_data_selectone(id):
     try:
@@ -43,7 +43,7 @@ def db_data_selectone(id):
     except Exception as e:
         raise e
 
-
+#data:'{"id": "1", "v1": "2", "v2": "3"}'
 def db_data_add(data):
     try:
         evaldata = eval(data)
@@ -69,7 +69,6 @@ def db_data_upd(data):
         return True
     except Exception as e:
         raise e
-
 
 def db_data_del(id):
     try:        

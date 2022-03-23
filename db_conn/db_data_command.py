@@ -23,10 +23,8 @@ def db_connect():
     except Exception as e:
         raise e
 
-
 def db_connect_close(conn):
     conn.close()  # DB　クローズ
-
 
 def db_data_selectall():
     try:
@@ -44,7 +42,6 @@ def db_data_selectall():
     except Exception as e:
         raise e
 
-
 def db_data_selectone(id):
     conn = db_connect()
     cur = conn.cursor()  # カーソルを取得
@@ -58,7 +55,6 @@ def db_data_selectone(id):
     cur.close()  # カーソル クローズ
     db_connect_close(conn)
     return row
-
 
 def db_data_add(data):
     ID = str(data["ID"])
@@ -95,7 +91,6 @@ def db_data_upd(data):
     db_connect_close(conn)
 
     return True
-
 
 def db_data_del(id):
     sql = "DELETE TESTDATA WHERE ID = :1"

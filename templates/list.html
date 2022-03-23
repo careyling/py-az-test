@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>List</title>
+	<link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
+	<script type="text/javascript" src="/static/js/jquery-3.6.0.min/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="/static/js/bootstrap-5.1.3/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/static/js/bootstrap-5.1.3/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<h5>{{route}}</h5>
+		<div class="btn-group">
+			<button class="btn btn-primary" onclick="search()">SEARCH</button>
+			<button class="btn btn-primary" onclick="add()">ADD</button>
+		</div>
+		<table class="table table-striped" id="myTable">
+			<table class="table">
+				<thead class="table-primary">
+					<tr>
+						<th> ID </th>
+						<th> V1 </th>
+						<th> V2 </th>
+						<th> UPD </th>
+						<th> DEL </th>
+					</tr>
+				</thead>
+				<tbody id="myTbody">
+					{% for ID, V1,V2 in result %}
+					<tr>
+						<td> {{ ID }} </td>
+						<td> {{ V1 }} </td>
+						<td> {{ V2 }} </td>
+						<td> <input type="submit" class="btn btn-primary" value="UPD" onclick="upd('{{ ID }}')" />
+						</td>
+						<td> <input type="submit" class="btn btn-primary" value="DEL" onclick="del('{{ ID }}')" />
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+	</div>
+
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">
+						TestForm
+					</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+				</div>
+				<div><label id="newdata" style="display: none" /></div>
+				<div class="modal-body">
+					<div class="mb-3">
+						<label for="recipient-name" class="col-form-label">ID:</label>
+						<input type="text" class="form-control" id="id" />
+					</div>
+					<div class="mb-3">
+						<label for="recipient-name" class="col-form-label">V1:</label>
+						<input type="text" class="form-control" id="v1" />
+					</div>
+					<div class="mb-3">
+						<label for="recipient-name" class="col-form-label">V2:</label>
+						<input type="text" class="form-control" id="v2" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="closed()">Close</button>
+					<button type="button" class="btn btn-primary" onclick="fixed()">Fixed</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+</body>
+
+</html>
+
+<script>
+	basepath = "{{route}}";
+	$('myModal').on('hidden.bs.modal', function () { document.getElementById("newdata").reset(); });
+	function search() {
+		url = basepath + ".SEARCH";
+		//window.location.href = url;
+		$.ajax({
+			type: "GET",
+			url: url,
+			dataType: 'json',
+			success: function (data) {
+				$('#myTbody').html('');
+
+				data.forEach(function (item) {
+					var $trTemp = $("<tr></tr>");
+					//往行里面追加 td单元格
+					$trTemp.append("<td>" + item[0] + "</td>");
+					$trTemp.append("<td>" + item[1] + "</td>");
+					$trTemp.append("<td>" + item[2] + "</td>");
+					$trTemp.append("<td> <input type=\"submit\" class=\"btn btn-primary\" value=\"UPD\" onclick=\"upd(" + item[0] + ")\" /></td>");
+					$trTemp.append("<td> <input type=\"submit\" class=\"btn btn-primary\" value=\"DEL\" onclick=\"del(" + item[0] + ")\" /></td>");
+					$trTemp.appendTo("#myTbody");
+				});
+			}
+		});
+	}
+	function add() {
+		$('#newdata').html("true");
+		$('#id').val(null);
+		$('#v1').val(null);
+		$('#v2').val(null);
+		// $('#id').attr("value", null);
+		// $('#v1').attr("value", null);
+		// $('#v2').attr("value", null);
+		$('#myModal').modal('show');
+	}
+	function upd(id) {
+		url = basepath + ".SEARCHONE/" + id;
+		$.ajax({
+			type: "GET",
+			url: url,
+			success: function (data) {
+				$('#newdata').html("false");
+				$('#id').val(data["ID"]);
+				$('#v1').val(data["V1"]);
+				$('#v2').val(data["V2"]);
+				// $('#id').attr("value", data["ID"]);
+				// $('#v1').attr("value", data["V1"]);
+				// $('#v2').attr("value", data["V2"]);
+				$('#myModal').modal('show');
+			}
+		});
+	}
+	function del(id) {
+		url = basepath + ".DEL/" + id;
+		$.ajax({
+			type: "POST",
+			url: url,
+			success: function (data) {
+				search();
+				//window.location.reload(true);
+			}
+		});
+	}
+	function fixed() {
+		$('#myModal').modal('hide');
+		url = basepath + ".FIX";
+		var newdata = $('#newdata').html().trim();
+		var id = $('#id').val();
+		var v1 = $('#v1').val();
+		var v2 = $('#v2').val();
+		var params = { "newdata": newdata, "id": id, "v1": v1, "v2": v2 };
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: params,
+			success: function (data) {
+				search();
+				//window.location.reload(true);
+			}
+		});
+	}
+	function closed() {
+		$('#newdata').html("true");
+		$('#id').attr("value", null);
+		$('#v1').attr("value", null);
+		$('#v2').attr("value", null);
+		$('#myModal').modal('hide');
+	}
+</script>
