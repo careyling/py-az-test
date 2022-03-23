@@ -13,12 +13,15 @@ echo $ORACLE_SID
 echo $LD_LIBRARY_PATH
 echo $TNS_ADMIN
 
+echo ".env ok"
+
 echo $Cur_Dir"/ora/instantclient_21_5 > /etc/ld.so.conf.d/oracle-instantclient.conf"
+cat /etc/ld.so.conf.d/oracle-instantclient.conf
 ldconfig
 
-cd ora
-unzip instantclient-basic-linux.x64-21.5.0.0.0dbru.zip
-unzip instantclient-sdk-linux.x64-21.5.0.0.0dbru.zip
-unzip instantclient-sqlplus-linux.x64-21.5.0.0.0dbru.zip
+echo "conf ok"
 
-apt-get install -y libaio*
+cd ora
+unzip -o instantclient-basic-linux.x64-21.5.0.0.0dbru.zip
+unzip -o instantclient-sdk-linux.x64-21.5.0.0.0dbru.zip
+unzip -o instantclient-sqlplus-linux.x64-21.5.0.0.0dbru.zip
