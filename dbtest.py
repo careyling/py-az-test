@@ -1,8 +1,5 @@
-from email.policy import default
-from hashlib import new
 from flask import Flask, abort, request, jsonify, render_template, json,redirect,url_for
 
-from db_conn import db_data_command
 from models import TestModel_DbData
 
 from dotenv import load_dotenv,find_dotenv
@@ -11,11 +8,10 @@ load_dotenv(verbose=True)
 myapp = Flask(__name__)
 
 # 测试数据暂时存放
-tasks = [('1', '2', '3'), ('2', '3', '4')]
+#tasks = [('1', '2', '3'), ('2', '3', '4')]
 
 @myapp.route('/', methods=['GET'])
 def index():
-    #datas = db_data_command.db_data_selectall()
     return render_template('list.html', route="dbtest")
 
 

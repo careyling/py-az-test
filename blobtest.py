@@ -1,6 +1,6 @@
 from flask import Flask, abort, request, jsonify, render_template, json,redirect,url_for
 
-from blob_conn import blob_data_command
+from models import TetsModel_BlobData
 
 from dotenv import load_dotenv,find_dotenv
 load_dotenv(verbose=True)
@@ -12,14 +12,13 @@ tasks = [('1', '2', '3'), ('2', '3', '4')]
 
 @myapp.route('/', methods=['GET'])
 def index():
-    #datas = db_data_command.db_data_selectall()
     return render_template('list.html', route="blobtest")
 
 
 @myapp.route('/blobtest.SEARCH', methods=['GET'])
 def search():
     try:
-        #datas = blob_data_command.db_data_selectall()        
+        #datas = TetsModel_BlobData.searchAll()        
         return json.dumps(tasks)
         #return render_template('list.html', result=datas,route="blobtest")
     except Exception as e:
@@ -27,11 +26,10 @@ def search():
         return err 
 
 
-
 @myapp.route('/blobtest.SEARCHONE/<id>', methods=['GET'])
 def search_one(id):
     try:
-        #data = blob_data_command.db_data_selectone(id)
+        data = TetsModel_BlobData.searchOne(id)
         data = tasks[0]        
         id = data[0]
         v1 = data[1]
@@ -52,9 +50,9 @@ def fix_data():
     data = eval(str)
     try:
         if newdata == "true":
-            act = blob_data_command.db_data_add(data)
+            act = TetsModel_BlobData.insert(data)
         else:
-            act = blob_data_command.db_data_upd(data)
+            act = TetsModel_BlobData.update(data)
         return jsonify({'ACT': act})
     except Exception as e:
         err = str(e)
@@ -64,7 +62,7 @@ def fix_data():
 @myapp.route('/blobtest.DEL/<id>', methods=['POST'])
 def del_data(id):
     try:
-        act = blob_data_command.db_data_del(id)        
+        act = TetsModel_BlobData.delete(id)        
         return jsonify({'ACT': act})
     except Exception as e:
         err = str(e)

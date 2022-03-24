@@ -15,7 +15,7 @@ PASSWORD = os.environ['DBPASSWORD']
 
 class OracleDatabase(object):
     """
-    oracle 数据库操作类。
+    oracle
     """
     def __init__(self):
         """
@@ -58,37 +58,7 @@ class OracleDatabase(object):
             self.connect.rollback()
             print("データ検索エラー:{}".format(e))
 
-    def insert(self, **kwargs):
-        """
-        データ新規
-        """
-        try:
-            sql = 'sql' in kwargs and kwargs['sql'] or ''
-            param = 'param' in kwargs and kwargs['param'] or ''
-            self.cursor.execute(sql, param)
-            insert_id = self.connect.insert_id()
-            self.connect.commit()
-            return insert_id
-        except Exception as e:
-            self.connect.rollback()
-            print("データ新規エラー:{}".format(e))
-            
-    def update(self, **kwargs):
-        """
-        データ更新
-        """
-        try:
-            sql = 'sql' in kwargs and kwargs['sql'] or ''
-            param = 'param' in kwargs and kwargs['param'] or ''
-            self.cursor.execute(sql, param)
-            row_count = self.cursor.rowcount
-            self.connect.connect()
-            return row_count
-        except Exception as e:
-            self.connect.rollback()
-            print("データ更新エラー:{}".format(e))
-
-    def delete(self, **kwargs):
+    def exec(self, **kwargs):
         """
         データ削除
         """
@@ -101,7 +71,7 @@ class OracleDatabase(object):
             return row_count
         except Exception as e:
             self.connect.rollback()
-            print("データ削除エラー:{}".format(e))
+            print("データ操作エラー:{}".format(e))
 
     def __del__(self):
         """
