@@ -1,4 +1,7 @@
 #windows
 Thumbs.db
+bk
+.github
 .venv
+.vscode
 __pycache__

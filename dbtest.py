@@ -1,7 +1,9 @@
+from email.policy import default
 from hashlib import new
 from flask import Flask, abort, request, jsonify, render_template, json,redirect,url_for
 
 from db_conn import db_data_command
+from models import TestModel_DbData
 
 from dotenv import load_dotenv,find_dotenv
 load_dotenv(verbose=True)
@@ -20,9 +22,8 @@ def index():
 @myapp.route('/dbtest.SEARCH', methods=['GET'])
 def search():
     try:
-        datas = db_data_command.db_data_selectall()        
+        datas = TestModel_DbData.searchAll()
         return json.dumps(datas)
-        #return render_template('list.html', result=datas,route="dbtest")
     except Exception as e:
         err = str(e)
         return err 
@@ -31,7 +32,7 @@ def search():
 @myapp.route('/dbtest.SEARCHONE/<id>', methods=['GET'])
 def search_one(id):
     try:
-        data = db_data_command.db_data_selectone(id)
+        data = TestModel_DbData.searchOne(id)
         id = data[0]
         v1 = data[1]
         v2 = data[2]
@@ -51,9 +52,9 @@ def fix_data():
     data = eval(str)
     try:
         if newdata == "true":
-            act = db_data_command.db_data_add(data)
+            act = TestModel_DbData.insert(data)
         else:
-            act = db_data_command.db_data_upd(data)
+            act = TestModel_DbData.update(data)
         return jsonify({'ACT': act})
     except Exception as e:
         err = str(e)
@@ -63,7 +64,7 @@ def fix_data():
 @myapp.route('/dbtest.DEL/<id>', methods=['POST'])
 def del_data(id):
     try:
-        act = db_data_command.db_data_del(id)
+        act = TestModel_DbData.delete(id)
         return jsonify({'ACT': act})
     except Exception as e:
         err = str(e)
