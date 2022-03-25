@@ -40,7 +40,7 @@ def search_one(id):
         return err 
 
 
-@myapp.route('/blobtest.UPD/<id>', methods=['POST'])
+@myapp.route('/blobtest.FIX', methods=['POST'])
 def fix_data():
     newdata = request.form['newdata']
     id = request.form['id']

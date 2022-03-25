@@ -65,9 +65,9 @@ class OracleDatabase(object):
         try:
             sql = 'sql' in kwargs and kwargs['sql'] or ''
             param = 'param' in kwargs and kwargs['param'] or ''
-            self.cursor.execute(sql, param)
+            self.cursor.execute(sql, param)         
+            self.connect.commit()
             row_count = self.cursor.rowcount
-            self.connect.connect()
             return row_count
         except Exception as e:
             self.connect.rollback()
