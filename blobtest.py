@@ -1,9 +1,6 @@
 from flask import Flask, abort, request, jsonify, render_template, json,redirect,url_for
 
-from models import TetsModel_BlobData
-
-from dotenv import load_dotenv,find_dotenv
-load_dotenv(verbose=True)
+from models import TestModel_BlobData
 
 myapp = Flask(__name__)
 
@@ -18,8 +15,9 @@ def index():
 @myapp.route('/blobtest.SEARCH', methods=['GET'])
 def search():
     try:
-        #datas = TetsModel_BlobData.searchAll()        
-        return json.dumps(tasks)
+        #[{'ID': 1, 'V1': 2, 'V2': 3}]
+        datas = TestModel_BlobData.searchAllValue()        
+        return json.dumps(datas)
         #return render_template('list.html', result=datas,route="blobtest")
     except Exception as e:
         err = str(e)
@@ -29,8 +27,7 @@ def search():
 @myapp.route('/blobtest.SEARCHONE/<id>', methods=['GET'])
 def search_one(id):
     try:
-        data = TetsModel_BlobData.searchOne(id)
-        data = tasks[0]        
+        data = TestModel_BlobData.searchOne(id)
         id = data[0]
         v1 = data[1]
         v2 = data[2]
@@ -50,9 +47,9 @@ def fix_data():
     data = eval(str)
     try:
         if newdata == "true":
-            act = TetsModel_BlobData.insert(data)
+            act = TestModel_BlobData.insert(data)
         else:
-            act = TetsModel_BlobData.update(data)
+            act = TestModel_BlobData.update(data)
         return jsonify({'ACT': act})
     except Exception as e:
         err = str(e)
@@ -62,7 +59,7 @@ def fix_data():
 @myapp.route('/blobtest.DEL/<id>', methods=['POST'])
 def del_data(id):
     try:
-        act = TetsModel_BlobData.delete(id)        
+        act = TestModel_BlobData.delete(id)        
         return jsonify({'ACT': act})
     except Exception as e:
         err = str(e)

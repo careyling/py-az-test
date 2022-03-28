@@ -51,7 +51,7 @@ class Blob(object):
             self.blob_service.create_blob_from_text(
                 container_name=containername,
                 blob_name=blobname,
-                text=data)
+                text=str(data))
             return True
         except Exception as e:
             print("データ操作エラー:{}".format(e))

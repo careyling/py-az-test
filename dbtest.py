@@ -18,6 +18,7 @@ def index():
 @myapp.route('/dbtest.SEARCH', methods=['GET'])
 def search():
     try:
+        #[('1', '2', '3'), ('2', '3', '4'), ('3', '4', '5'), ('4', '5', '6')]
         datas = TestModel_DbData.searchAll()
         return json.dumps(datas)
     except Exception as e:

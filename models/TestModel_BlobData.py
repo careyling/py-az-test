@@ -1,3 +1,4 @@
+import json
 import sys,os
 sys.path.append(os.getcwd())
 from blob_conn import blob_conn_command
@@ -20,19 +21,28 @@ def searchAll():
     except Exception as e:
         raise e
 
+def searchAllValue():
+    try:
+        datas = blob_conn.selectall(mycontainername,myblobdic)
+        vdatas =[]
+        for data in datas:
+            vdatas.append(getdatavalue(data))
+        return vdatas
+    except Exception as e:
+        raise e
 
-def searchOne(id):
+
+def searchOneValue(id):
     try:
         data = blob_conn.selectone(mycontainername,myblobdic+'/'+id)
-        return data
+        return getdatavalue(data)
     except Exception as e:
         raise e
 
 
 def insert(data):
     try:
-        evaldata = eval(data)
-        id = evaldata['id']
+        id = str(data["ID"])
         blob_name = myblobdic+'/'+id
         blob_conn.fix(mycontainername,blob_name,data)
         return True
@@ -42,8 +52,7 @@ def insert(data):
 
 def update(data):
     try:
-        evaldata = eval(data)
-        id = evaldata['id']
+        id = str(data["ID"])
         blob_name = myblobdic+'/'+id
         blob_conn.fix(mycontainername,blob_name,data)
         return True
@@ -54,7 +63,13 @@ def update(data):
 def delete(id):
     try:
         blob_name = myblobdic+'/'+id
-        blob_conn.fix(mycontainername,blob_name)
+        blob_conn.delete(mycontainername,blob_name)
         return True
     except Exception as e:
         raise e
+
+def getdatavalue(data):
+    id = str(data["ID"])
+    v1 = str(data["V1"])
+    v2 = str(data["V2"])
+    return (id, v1, v2)

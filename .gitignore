@@ -5,3 +5,4 @@ bk
 .venv
 .vscode
 __pycache__
+test.py
