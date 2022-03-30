@@ -16,7 +16,7 @@ def index():
 def search():
     try:
         #[{'ID': 1, 'V1': 2, 'V2': 3}]
-        datas = TestModel_BlobData.searchAllValue()        
+        datas = TestModel_BlobData.searchAll()        
         return json.dumps(datas)
         #return render_template('list.html', result=datas,route="blobtest")
     except Exception as e:
