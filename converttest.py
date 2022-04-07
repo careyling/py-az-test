@@ -11,6 +11,8 @@ tasks = [('1', '2', '3'), ('2', '3', '4')]
 def index():
     try:
         datas = TestModel_BlobData.searchAll()
+        if len(datas) == 0:
+            return json.dumps("NULL")
         for data in datas:
             id = data[0]
             v1 = data[1]
@@ -19,7 +21,7 @@ def index():
             edata = eval(str)
             TestModel_DbData.insert(data=edata)
             TestModel_BlobData.delete(id)
-        return jsonify({'task': "OK"})
+        return json.dumps("OK")
     except Exception as e:
         err = str(e)
         return err 
