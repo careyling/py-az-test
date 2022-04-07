@@ -1,9 +1,6 @@
-from flask import Flask, abort, request, jsonify, render_template, json,redirect,url_for
+from flask import Flask, request, jsonify, render_template, json
 
 from models import TestModel_DbData
-
-from dotenv import load_dotenv,find_dotenv
-load_dotenv(verbose=True)
 
 myapp = Flask(__name__)
 

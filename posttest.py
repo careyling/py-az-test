@@ -1,6 +1,6 @@
 exit#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask import Flask, abort, request, jsonify, render_template
+from flask import Flask, abort, request, jsonify
 
 myapp = Flask(__name__)
 
