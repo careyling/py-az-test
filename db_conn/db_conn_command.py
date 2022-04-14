@@ -60,12 +60,27 @@ class OracleDatabase(object):
 
     def exec(self, **kwargs):
         """
-        データ削除
+        データ操作
         """
         try:
             sql = 'sql' in kwargs and kwargs['sql'] or ''
             param = 'param' in kwargs and kwargs['param'] or ''
             self.cursor.execute(sql, param)         
+            self.connect.commit()
+            row_count = self.cursor.rowcount
+            return row_count
+        except Exception as e:
+            self.connect.rollback()
+            print("データ操作エラー:{}".format(e))
+
+    def execmany(self, **kwargs):
+        """
+        データ操作
+        """
+        try:
+            sql = 'sql' in kwargs and kwargs['sql'] or ''
+            param = 'param' in kwargs and kwargs['param'] or ''
+            self.cursors.executemany(sql, param)         
             self.connect.commit()
             row_count = self.cursor.rowcount
             return row_count
